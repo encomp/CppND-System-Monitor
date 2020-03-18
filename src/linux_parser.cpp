@@ -1,10 +1,12 @@
 #include <dirent.h>
 #include <unistd.h>
+#include <set>
 #include <string>
 #include <vector>
 
 #include "linux_parser.h"
 
+using std::set;
 using std::stof;
 using std::string;
 using std::to_string;
@@ -66,8 +68,29 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
-// TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+// Read and return the system memory utilization
+float LinuxParser::MemoryUtilization() { 
+  string line, name;
+  int value = 0;
+  vector<int> values;
+  set<string> memory;
+  memory.insert("MemTotal:");
+  memory.insert("MemAvailable:");
+  std::ifstream filestream(kProcDirectory + kMeminfoFilename);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::istringstream linestream(line);
+      linestream >> name >> value;
+      if (memory.find(name) != memory.end()) {
+        values.push_back(value);
+      }
+      if (values.size() == 2) {
+        break;
+      }
+    }
+  }
+  return (values[0] - values[1]) * 1.0 / values[0]; 
+}
 
 // Read and return the system uptime
 long LinuxParser::UpTime() {
