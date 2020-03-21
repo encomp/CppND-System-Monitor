@@ -7,6 +7,7 @@ using std::string;
 using std::stoi;
 
 Processor::Processor(vector<string> cpu) {
+    init = false;
     if (cpu.size() == 10) {
         user = stoi(cpu[0]);
         nice = stoi(cpu[1]);
@@ -19,8 +20,6 @@ Processor::Processor(vector<string> cpu) {
         guest = stoi(cpu[8]);
         guestNice = stoi(cpu[9]);
         init = true;
-    } else {
-        init = false;
     }
 }
 

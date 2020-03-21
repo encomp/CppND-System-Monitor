@@ -16,8 +16,7 @@ using std::vector;
 
 // Return the system's CPU
 Processor& System::Cpu() {
-    vector<string> values = LinuxParser::CpuUtilization();
-    cpu_ = Processor(values);
+    cpu_ = Processor(LinuxParser::CpuUtilization());
     return cpu_;
 }
 
