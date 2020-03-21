@@ -262,3 +262,26 @@ long LinuxParser::UpTime(int pid) {
   }
   return uptime;
 }
+
+float LinuxParser::CpuUtilization(int pid) {
+  string line;
+  string value;
+  float result;
+  std::ifstream stream(kProcDirectory + to_string(pid) + kStatFilename);
+  getline(stream, line);
+  string str = line;
+  std::istringstream buf(str);
+  std::istream_iterator<string> beg(buf), end;
+  vector<string> values(beg, end); 
+  float utime = UpTime(pid);
+  float stime = stof(values[14]);
+  float cutime = stof(values[15]);
+  float cstime = stof(values[16]);
+  float starttime = stof(values[21]);
+  float uptime = UpTime();
+  float freq = sysconf(_SC_CLK_TCK);
+  float total_time = utime + stime;
+  float seconds = uptime - (starttime / freq);
+  result = 100.0 * ((total_time / freq) / seconds);
+  return result;
+}
