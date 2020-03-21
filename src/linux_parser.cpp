@@ -106,17 +106,29 @@ long LinuxParser::UpTime() {
 }
 
 // TODO: Read and return the number of jiffies for the system
-long LinuxParser::Jiffies() { return 0; }
+long LinuxParser::Jiffies() {
+  vector<string> jiffies = CpuUtilization();
+  long total_since_boot = 0;
+  for (string s: jiffies) {
+    total_since_boot += std::atol(s.c_str());
+  }
+  return total_since_boot;
+}
 
 // TODO: Read and return the number of active jiffies for a PID
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { return 0; }
 
 // TODO: Read and return the number of active jiffies for the system
-long LinuxParser::ActiveJiffies() { return 0; }
+long LinuxParser::ActiveJiffies() {
+  return Jiffies() - IdleJiffies();
+}
 
 // TODO: Read and return the number of idle jiffies for the system
-long LinuxParser::IdleJiffies() { return 0; }
+long LinuxParser::IdleJiffies() {
+  vector<string> jiffies = CpuUtilization();
+  return std::atol(jiffies[3].c_str());
+}
 
 // Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() {
