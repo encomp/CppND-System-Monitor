@@ -193,7 +193,7 @@ string LinuxParser::Ram(int pid) {
       std::istringstream linestream(line);
       linestream >> name >> value;
       if (name == "VmSize:") {
-        ram = value;
+        ram = std::to_string(std::stoll(value) / 1000);
       }
     }
   }
