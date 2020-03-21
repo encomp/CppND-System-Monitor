@@ -275,8 +275,6 @@ float LinuxParser::CpuUtilization(int pid) {
   vector<string> values(beg, end); 
   float utime = UpTime(pid);
   float stime = stof(values[14]);
-  float cutime = stof(values[15]);
-  float cstime = stof(values[16]);
   float starttime = stof(values[21]);
   float uptime = UpTime();
   float freq = sysconf(_SC_CLK_TCK);
