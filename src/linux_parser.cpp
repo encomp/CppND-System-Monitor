@@ -230,15 +230,15 @@ string LinuxParser::Uid(int pid) {
 
 // Read and return the user associated with a process
 string LinuxParser::User(int pid) {
-  string user = "", x, line;
-  int id;
+  string user = "", x, line, id;
+  string uid = LinuxParser::Uid(pid);
   std::ifstream stream(kPasswordPath);
   if (stream.is_open()) {
     while (std::getline(stream, line)) {
       std::replace(line.begin(), line.end(), ':', ' ');
       std::istringstream linestream(line);
       linestream >> user >> x >> id;
-      if (id == pid) {
+      if (id == uid) {
         break;
       }
     }
@@ -281,5 +281,5 @@ float LinuxParser::CpuUtilization(int pid) {
   float total_time = utime + stime;
   float seconds = uptime - (starttime / freq);
   result = 100.0 * ((total_time / freq) / seconds);
-  return result;
+  return result / 100.0;
 }
