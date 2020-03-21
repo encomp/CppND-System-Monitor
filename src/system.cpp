@@ -27,9 +27,10 @@ vector<Process>& System::Processes() {
     for(int pid : pids) {
         string user = LinuxParser::User(pid);
         string cmd = LinuxParser::Command(pid);
+        float cpu = LinuxParser::CpuUtilization(pid);
         string ram = LinuxParser::Ram(pid);
         long upTime = LinuxParser::UpTime(pid);
-        processes_.push_back(Process(pid, user, cmd, 0.0, ram, upTime));
+        processes_.push_back(Process(pid, user, cmd, cpu, ram, upTime));
     }
     return processes_;     
 }
